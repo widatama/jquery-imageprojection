@@ -1,0 +1,80 @@
+/*
+
+
+	|Typography
+
+*/
+
+	body {
+		font-size: 100%;
+		line-height: 1.5; /*16/24*/
+		-webkit-text-size-adjust: 100%;
+		font-family: "Source Sans Pro", sans-serif;
+	}
+
+	html>body { font-size: 16px; }
+
+	h1, h2, h3, h4, h5, h6 {
+		font-weight: normal; }
+	h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { font-weight: inherit; }
+	h1 {
+		font-size:2em;
+		line-height: 1.5;
+		margin-bottom: 0.75em;
+		font-weight: bold;
+	}
+	h2 {
+		font-size:1.75em;
+		line-height: 1.7143;
+		margin-bottom: 0.8571em;
+  	}
+	h3 {
+		font-size: 1.5em;
+		line-height: 1;
+		margin-bottom: 1em;
+	}
+	h4 {
+		font-size: 1.25em;
+		/*line-height: 2.425;*/
+		line-height: 2.4;
+	}
+	h5 {
+		font-weight: bold;
+		margin-bottom: 1.5em;
+	}
+	h6 {
+		font-variant: small-caps;
+		margin-bottom: 1.5em;
+	}
+
+	p, pre, address { font-size: 1em;margin-bottom: 1.5em; }
+	p img { margin: 0; }
+
+	cite, dfn, em, i { font-style: italic; }
+	b, strong, dt, legend { font-weight: bold; }
+	small { font-size: 0.75em; }
+
+	form, legend, label { font-size: 1em; }
+	/*legend { position: relative; top: 5px; }*/
+	table { font-size: 1em; }
+	caption { font-size: 1em;position: relative; }
+	hr { position: relative; height: 4px; margin: 18px 0 14px 0; }
+
+	b, dt, legend { font-weight: bold; }
+	cite, dfn, i { font-style: italic; }
+	code, kbd, samp, pre, tt, var { font-family: mono-space, monospace; }
+	del { text-decoration: line-through; }
+	ins { color: #f00; }
+
+	abbr, acronym { text-transform: uppercase; letter-spacing: .1em; }
+	abbr[title], acronym[title], dfn[title] { border-bottom: 0.05em dotted black; cursor: help; }
+
+
+	/*	Blockquotes  */
+	blockquote, blockquote p { color: #777; font-style: italic; }
+	blockquote { margin: 0 0 1.5px; padding: 0 0 0 1.5%; border-left: 1px solid #ddd; }
+	blockquote cite { display: block; color: #555; }
+	blockquote cite:before { content: "\2014 \0020"; }
+	blockquote cite a, blockquote cite a:visited, blockquote cite a:visited { color: #555; }
+
+	hr { border: solid #ddd; border-width: 1px 0 0; clear: both; margin: 10px 0 30px; height: 0; }

@@ -1,0 +1,80 @@
+/*
+
+
+	|Basic
+
+*/
+
+	body {
+		background: #fff; }
+
+
+/*
+
+
+	|Links
+
+*/
+
+	a, a:visited { text-decoration: underline; outline: 0; }
+  a {  color: #09F; }
+  a:visited{ color: #777; }
+	a:hover, a:focus { color: #000; }
+	p a, p a:visited { line-height: inherit; }
+
+
+/*
+
+
+	|Lists
+
+*/
+
+	ul, ol, dl { margin-bottom: 1.5em;}
+  ol{ list-style: decimal; }
+  ul{ list-style: circle; }
+	li ul, li ol, ul ul, ol ol { top: 0; margin-top: 0; margin-bottom: 0; }
+	li h1, li h2, li h3,
+	li h4, li h5, li h6,
+	li p { top: 0; }
+
+
+/*
+
+
+	|Images
+
+*/
+
+	img{
+		max-width: 100%;
+		height: auto;
+    vertical-align: middle;
+  }
+
+s/*
+
+
+	|Miscs
+
+*/
+
+	.left        { float: left; }
+	.right       { float: right; }
+	.text-left   { text-align: left; }
+	.text-right  { text-align: right; }
+	.text-center { text-align: center; }
+	.hide        { display: none; }
+	.highlight   { background: #ff0; }
+
+	#googlemap img, object, embed { max-width: none; }
+
+	#map_canvas embed { max-width: none; }
+	#map_canvas img { max-width: none; }
+	#map_canvas object { max-width: none; }
+
+	.remove-bottom { margin-bottom: 0 !important; }
+	.half-bottom { margin-bottom: 0.75em !important; }
+	.add-bottom { margin-bottom: 1.5em !important; }
+
+  .full-width{ width: 100%; }
