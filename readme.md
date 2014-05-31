@@ -1,11 +1,20 @@
 As the name suggests, this plugin simulates image projection. It works by using two similar images for the original and the projected image.
 
+<img src="images/diagram.jpg" alt="Image Projection Diagram" title="Image Projection Diagram">
+
 Whenever the surface is hovered, the viewfinder and the projected image come up. Everything covered by the viewfinder is shown on the projected image.
 
 ##Sample usage
 
 ###HTML
 
+Include the scripts.
+```html
+<script src="javascripts/jquery.min.js"></script>
+<script src="javascripts/image.projection.js"></script>
+```
+
+Structure the image. Here, overlay acts as the surface. The image used as original and contains the url for projection.
 ```html
 <div class="wrap">
   <div class="overlay"></div>
@@ -15,6 +24,7 @@ Whenever the surface is hovered, the viewfinder and the projected image come up.
 
 ###Javascript
 
+Initiate the projection.
 ```javascript
 $(".wrap .overlay").imageProjection($("#sampleimg"));
 ```
