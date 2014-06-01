@@ -1,6 +1,6 @@
 As the name suggests, this plugin simulates image projection. It works by using two similar images for the original and the projected image.
 
-<img src="images/diagram.jpg" alt="Image Projection Diagram" title="Image Projection Diagram">
+![Image Projection Diagram](images/diagram.jpg "Image Projection Diagram")
 
 Whenever the surface is hovered, the viewfinder and the projected image come up. Everything covered by the viewfinder is shown on the projected image.
 
