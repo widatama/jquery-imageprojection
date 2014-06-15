@@ -1,4 +1,4 @@
-As the name suggests, this plugin simulates image projection. It works by using two similar images for the original and the projected image.
+As the name suggests, this plugin simulates image projection. It works by using two similar images for the original and the projected image. [See the demo](http://widatama.github.io/jquery-imageprojection)
 
 ![Image Projection Diagram](images/diagram.jpg "Image Projection Diagram")
 
