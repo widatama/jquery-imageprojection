@@ -29,6 +29,23 @@ Initiate the projection.
 $(".wrap .overlay").imageProjection($("#sampleimg"));
 ```
 
+##Development
+
+Install dependencies
+```bash
+npm install
+```
+
+This will build the scripts from src to dist.
+```bash
+grunt build
+```
+
+This will build the scripts from src to dist and then turn on the watcher.
+```bash
+grunt dev
+```
+
 ##License
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
