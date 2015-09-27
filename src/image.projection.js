@@ -1,4 +1,5 @@
 $.fn.imageProjection = function( $image, options ) {
+  "use strict";
 
   // The image that will be projected
   var originImage = new Image();
@@ -8,8 +9,8 @@ $.fn.imageProjection = function( $image, options ) {
   // Ideally the size is proportional to the original
   var projectedImage = new Image();
 
-  var pWidth = originImage.width
-  var pHeight = originImage.height
+  var pWidth = originImage.width;
+  var pHeight = originImage.height;
 
   // The ratio of original image to projected image, defaulted to one
   var widthRatio = 1;
@@ -27,7 +28,7 @@ $.fn.imageProjection = function( $image, options ) {
   });
 
   // Create the viewfinder and projected image container
-  var $viewfinder = $( "<div id='ip-viewfinder'></div>" );
+  var viewfinder;
   var $projection = $("<div id='ip-projection'></div>");
 
   projectedImage.onload = function(){
@@ -36,15 +37,14 @@ $.fn.imageProjection = function( $image, options ) {
     widthRatio = projectedImage.width / originImage.width;
     heightRatio = projectedImage.height / originImage.height;
 
-    // Set the viewfinder size based on original image size
-    $viewfinder.width( pWidth * (1 / widthRatio) );
-    $viewfinder.height( pHeight * (1 / heightRatio) );
-
-    // Set viewfinder position and hide it for the time being
-    $viewfinder.css({
-      position: "absolute",
-      "z-index": 3,
-      display: "none"
+    // Create viewfinder
+    viewfinder = new Viewfinder({
+      width: pWidth / widthRatio,
+      height: pHeight / heightRatio,
+      boundaries: {
+        width: $surface.width(),
+        height: $surface.height()
+      }
     });
 
     // Set projection size
@@ -62,26 +62,27 @@ $.fn.imageProjection = function( $image, options ) {
     });
 
     // Making sure that there are only one viewfinder and one projection
-    $surface.find("#viewfinder").remove();
-    $surface.parent().find("#projection").remove();
+    //$surface.find("#ip-viewfinder").remove();
+    $surface.parent().find("#ip-projection").remove();
 
     // Put viewfinder and projection on their respective places
-    $surface.append($viewfinder);
+    // TODO: Improve dom building
+    $surface.append(viewfinder.$el);
     $surface.parent().append($projection);
 
   };
 
   // Set up the projection image
-  projectedImage.src = $image.data("pimg") == "" ? $image.attr("src") : $image.data("pimg");
+  projectedImage.src = $image.data("pimg") === "" ? $image.attr("src") : $image.data("pimg");
 
   // Toggle the viewfinder and projection whenever the mouse cursor is inside the surface
   this.hover(
     function( event ){
-      $viewfinder.fadeIn(500);
+      viewfinder.show(500);
       $projection.fadeIn(500);
     },
     function( event ){
-      $viewfinder.fadeOut(250);
+      viewfinder.hide(250);
       $projection.fadeOut(250);
     }
   );
@@ -90,49 +91,17 @@ $.fn.imageProjection = function( $image, options ) {
 
     // Whenever the mouse cursor is hovering the surface, update viewfinder position
 
-    var windowScrollTop = $window.scrollTop();
-    var windowScrollLeft = $window.scrollLeft();
+    var mousePosition = {};
 
-    setViewfinderPosition(Math.floor(event.clientX - surfaceOffset.left + windowScrollLeft), Math.floor(event.clientY - surfaceOffset.top + windowScrollTop));
+    mousePosition.left = Math.floor(event.clientX - surfaceOffset.left + $window.scrollLeft());
+    mousePosition.top = Math.floor(event.clientY - surfaceOffset.top + $window.scrollTop());
+
+    viewfinder.setPosition(mousePosition);
 
   });
 
-  function setViewfinderPosition( mouseLeft, mouseTop ){
-
-    // Keep the mouse pointer at the center of viewfinder.
-    var viewfinderLeft = (mouseLeft - ($viewfinder.width() / 2));
-    var viewfinderTop = (mouseTop - ($viewfinder.height() / 2));
-
-    // Keep the viewfinder inside the surface.
-
-    // Protect the top-left bounds.
-    viewfinderLeft = Math.max( viewfinderLeft, 0 );
-    viewfinderTop = Math.max( viewfinderTop, 0 );
-
-    // Protect the bottom-right bounds. Because the
-    // bottom and right need to take the dimensions
-    // of the viewfinder into account, be sure to use
-    // the outer width to include the border.
-    viewfinderLeft = Math.min(
-      viewfinderLeft,
-      ($surface.width() - $viewfinder.outerWidth())
-    );
-    viewfinderTop = Math.min(
-      viewfinderTop,
-      ($surface.height() - $viewfinder.outerHeight())
-    );
-
-    // Position the viewfinder inside the surface.
-    $viewfinder.css({
-      left: (viewfinderLeft + "px"),
-      top: (viewfinderTop + "px")
-    });
-
-    // Adjust the projected image as we move around the viewfinder.
-    $projection.css("background-position", ((viewfinderLeft) * -1 * widthRatio) + "px" + " " + ((viewfinderTop) * -1 * heightRatio) + "px")
-
-  };
-
+  // Adjust the projected image as we move around the viewfinder.
+  //$projection.css("background-position", ((viewfinderLeft) * -1 * widthRatio) + "px" + " " + ((viewfinderTop) * -1 * heightRatio) + "px");
 
   return this;
 

@@ -1,10 +1,10 @@
 {
   "name": "y",
   "version": "0.0.2",
-  "description": "As the name suggests, this plugin simulates image projection. It works by using two similar images for the original and the projected image. [See the demo](http://widatama.github.io/jquery-imageprojection)",
+  "description": "This plugin simulates image projection. It works by using two similar images for the original and the projected image. [See the demo](http://widatama.github.io/jquery-imageprojection)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/hihat tests/*.js -p tap-dev-tool"
   },
   "repository": {
     "type": "git",

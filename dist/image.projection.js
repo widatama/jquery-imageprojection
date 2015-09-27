@@ -1,5 +1,6 @@
 (function($) {
     $.fn.imageProjection = function($image, options) {
+        "use strict";
         var originImage = new Image();
         originImage.src = $image.attr("src");
         var projectedImage = new Image();
@@ -13,17 +14,18 @@
         $surface.parent().css({
             position: "relative"
         });
-        var $viewfinder = $("<div id='ip-viewfinder'></div>");
+        var viewfinder;
         var $projection = $("<div id='ip-projection'></div>");
         projectedImage.onload = function() {
             widthRatio = projectedImage.width / originImage.width;
             heightRatio = projectedImage.height / originImage.height;
-            $viewfinder.width(pWidth * (1 / widthRatio));
-            $viewfinder.height(pHeight * (1 / heightRatio));
-            $viewfinder.css({
-                position: "absolute",
-                "z-index": 3,
-                display: "none"
+            viewfinder = new Viewfinder({
+                width: pWidth / widthRatio,
+                height: pHeight / heightRatio,
+                boundaries: {
+                    width: $surface.width(),
+                    height: $surface.height()
+                }
             });
             $projection.width(pWidth);
             $projection.height(pHeight);
@@ -35,37 +37,71 @@
                 top: 0,
                 "z-index": 3
             });
-            $surface.find("#viewfinder").remove();
-            $surface.parent().find("#projection").remove();
-            $surface.append($viewfinder);
+            $surface.parent().find("#ip-projection").remove();
+            $surface.append(viewfinder.$el);
             $surface.parent().append($projection);
         };
-        projectedImage.src = $image.data("pimg") == "" ? $image.attr("src") : $image.data("pimg");
+        projectedImage.src = $image.data("pimg") === "" ? $image.attr("src") : $image.data("pimg");
         this.hover(function(event) {
-            $viewfinder.fadeIn(500);
+            viewfinder.show(500);
             $projection.fadeIn(500);
         }, function(event) {
-            $viewfinder.fadeOut(250);
+            viewfinder.hide(250);
             $projection.fadeOut(250);
         });
         this.mousemove(function(event) {
-            var windowScrollTop = $window.scrollTop();
-            var windowScrollLeft = $window.scrollLeft();
-            setViewfinderPosition(Math.floor(event.clientX - surfaceOffset.left + windowScrollLeft), Math.floor(event.clientY - surfaceOffset.top + windowScrollTop));
+            var mousePosition = {};
+            mousePosition.left = Math.floor(event.clientX - surfaceOffset.left + $window.scrollLeft());
+            mousePosition.top = Math.floor(event.clientY - surfaceOffset.top + $window.scrollTop());
+            viewfinder.setPosition(mousePosition);
         });
-        function setViewfinderPosition(mouseLeft, mouseTop) {
-            var viewfinderLeft = mouseLeft - $viewfinder.width() / 2;
-            var viewfinderTop = mouseTop - $viewfinder.height() / 2;
-            viewfinderLeft = Math.max(viewfinderLeft, 0);
-            viewfinderTop = Math.max(viewfinderTop, 0);
-            viewfinderLeft = Math.min(viewfinderLeft, $surface.width() - $viewfinder.outerWidth());
-            viewfinderTop = Math.min(viewfinderTop, $surface.height() - $viewfinder.outerHeight());
-            $viewfinder.css({
-                left: viewfinderLeft + "px",
-                top: viewfinderTop + "px"
-            });
-            $projection.css("background-position", viewfinderLeft * -1 * widthRatio + "px" + " " + viewfinderTop * -1 * heightRatio + "px");
-        }
         return this;
     };
+    function Viewfinder(customOptions) {
+        "use strict";
+        var self = this;
+        var options = {};
+        var defaultOptions = {
+            className: "ip-viewfinder",
+            width: 1,
+            height: 1,
+            boundaries: {
+                width: 100,
+                height: 100
+            }
+        };
+        options = $.extend(defaultOptions, customOptions);
+        this.$el = $("<div/>", {
+            "class": options.className
+        });
+        this.$el.width(options.width);
+        this.$el.height(options.height);
+        var calculatePosition = function(mousePosition) {
+            var position = {};
+            position.left = mousePosition.left - self.$el.width() / 2;
+            position.top = mousePosition.top - self.$el.height() / 2;
+            position.left = Math.max(position.left, 0);
+            position.top = Math.max(position.top, 0);
+            position.left = Math.min(position.left, options.boundaries.width - self.$el.outerWidth());
+            position.top = Math.min(position.top, options.boundaries.height - self.$el.outerHeight());
+            return position;
+        };
+        this.setPosition = function(mousePosition) {
+            var position = calculatePosition(mousePosition);
+            self.$el.css({
+                left: position.left + "px",
+                top: position.top + "px"
+            });
+        };
+        this.setSize = function(size) {
+            self.$el.width(options.width);
+            self.$el.height(options.height);
+        };
+        this.show = function(delay) {
+            self.$el.addClass("ip-viewfinder--shown");
+        };
+        this.hide = function(delay) {
+            self.$el.removeClass("ip-viewfinder--shown");
+        };
+    }
 })(window.jQuery);

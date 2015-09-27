@@ -1,5 +1,5 @@
 srcFiles = [
-  "src/image.projection.js"
+  "src/*.js"
 ];
 
 module.exports = {
