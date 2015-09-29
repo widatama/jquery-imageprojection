@@ -15,10 +15,17 @@
             position: "relative"
         });
         var viewfinder;
-        var $projection = $("<div id='ip-projection'></div>");
-        projectedImage.onload = function() {
-            widthRatio = projectedImage.width / originImage.width;
-            heightRatio = projectedImage.height / originImage.height;
+        var projection = new Projection({
+            imageUrl: $image.data("pimg") === "" ? $image.attr("src") : $image.data("pimg"),
+            width: originImage.width,
+            height: originImage.height,
+            position: {
+                left: $surface.width() + 30
+            }
+        });
+        projection.$el.on("ip.projection.imageLoaded", function() {
+            widthRatio = projection.image.width / originImage.width;
+            heightRatio = projection.image.height / originImage.height;
             viewfinder = new Viewfinder({
                 width: pWidth / widthRatio,
                 height: pHeight / heightRatio,
@@ -27,35 +34,78 @@
                     height: $surface.height()
                 }
             });
-            $projection.width(pWidth);
-            $projection.height(pHeight);
-            $projection.css({
-                background: "url('" + projectedImage.src + "') no-repeat 0 0",
-                display: "none",
-                position: "absolute",
-                left: $surface.width() + 30,
-                top: 0,
-                "z-index": 3
-            });
-            $surface.parent().find("#ip-projection").remove();
             $surface.append(viewfinder.$el);
-            $surface.parent().append($projection);
-        };
-        projectedImage.src = $image.data("pimg") === "" ? $image.attr("src") : $image.data("pimg");
+            $surface.parent().append(projection.$el);
+        });
         this.hover(function(event) {
-            viewfinder.show(500);
-            $projection.fadeIn(500);
+            viewfinder.show();
+            projection.show();
         }, function(event) {
-            viewfinder.hide(250);
-            $projection.fadeOut(250);
+            viewfinder.hide();
+            projection.hide();
         });
         this.mousemove(function(event) {
             var mousePosition = {};
             mousePosition.left = Math.floor(event.clientX - surfaceOffset.left + $window.scrollLeft());
             mousePosition.top = Math.floor(event.clientY - surfaceOffset.top + $window.scrollTop());
             viewfinder.setPosition(mousePosition);
+            var projectionImagePosition = {};
+            projectionImagePosition.left = viewfinder.position.left * -1 * widthRatio;
+            projectionImagePosition.top = viewfinder.position.top * -1 * heightRatio;
+            projection.setImagePosition(projectionImagePosition);
         });
         return this;
+    };
+    var Projection = function(customOptions) {
+        "use strict";
+        var self = this;
+        var options = {};
+        var defaultOptions = {
+            className: "ip-projection",
+            imageUrl: "",
+            width: 1,
+            height: 1,
+            position: {
+                left: 0,
+                top: 0
+            }
+        };
+        options = $.extend(defaultOptions, customOptions);
+        this.$el = $("<div/>", {
+            "class": options.className
+        });
+        this.image = new Image();
+        this.image.src = options.imageUrl;
+        this.image.onload = function() {
+            self.$el.trigger("ip.projection.imageLoaded");
+            self.$el.css({
+                "background-image": "url('" + self.image.src + "')",
+                "background-repeat": "no-repeat",
+                left: options.position.left
+            });
+        };
+        this.setImagePosition = function(position) {
+            self.$el.css({
+                "background-position": position.left + "px " + position.top + "px"
+            });
+        };
+        this.show = function() {
+            self.$el.addClass(options.className + "--shown");
+            self.$el.css({
+                width: options.width,
+                height: options.height
+            });
+        };
+        this.hide = function() {
+            self.$el.removeClass(options.className + "--shown");
+            self.$el.css({
+                width: 0,
+                height: 0
+            });
+        };
+        this.destroy = function() {
+            self.$el.remove();
+        };
     };
     function Viewfinder(customOptions) {
         "use strict";
@@ -76,6 +126,7 @@
         });
         this.$el.width(options.width);
         this.$el.height(options.height);
+        this.position = {};
         var calculatePosition = function(mousePosition) {
             var position = {};
             position.left = mousePosition.left - self.$el.width() / 2;
@@ -87,21 +138,24 @@
             return position;
         };
         this.setPosition = function(mousePosition) {
-            var position = calculatePosition(mousePosition);
+            self.position = calculatePosition(mousePosition);
             self.$el.css({
-                left: position.left + "px",
-                top: position.top + "px"
+                left: self.position.left + "px",
+                top: self.position.top + "px"
             });
         };
         this.setSize = function(size) {
             self.$el.width(options.width);
             self.$el.height(options.height);
         };
-        this.show = function(delay) {
-            self.$el.addClass("ip-viewfinder--shown");
+        this.show = function() {
+            self.$el.addClass(options.className + "--shown");
         };
-        this.hide = function(delay) {
-            self.$el.removeClass("ip-viewfinder--shown");
+        this.hide = function() {
+            self.$el.removeClass(options.className + "--shown");
+        };
+        this.destroy = function() {
+            self.$el.remove();
         };
     }
 })(window.jQuery);

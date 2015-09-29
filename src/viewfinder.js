@@ -26,6 +26,8 @@ function Viewfinder(customOptions) {
   this.$el.width(options.width);
   this.$el.height(options.height);
 
+  this.position = {};
+
   // Calculate viewfinder position based on mouse position
   var calculatePosition = function(mousePosition) {
     var position = {};
@@ -54,11 +56,11 @@ function Viewfinder(customOptions) {
   // public
 
   this.setPosition = function(mousePosition) {
-    var position = calculatePosition(mousePosition);
+    self.position = calculatePosition(mousePosition);
 
     self.$el.css({
-      left: (position.left + "px"),
-      top: (position.top + "px")
+      left: (self.position.left + "px"),
+      top: (self.position.top + "px")
     });
   };
 
@@ -68,11 +70,11 @@ function Viewfinder(customOptions) {
   };
 
   // Show/hide viewfinder using class so it can be handled with css
-  this.show = function(delay) {
+  this.show = function() {
     self.$el.addClass(options.className + "--shown");
   };
 
-  this.hide = function(delay) {
+  this.hide = function() {
     self.$el.removeClass(options.className + "--shown");
   };
 
