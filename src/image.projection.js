@@ -1,12 +1,24 @@
-$.fn.imageProjection = function( $image, options ) {
+$.fn.imageProjection = function(customOptions) {
   "use strict";
 
-  // The image that will be projected
-  var originImage = new Image();
-  originImage.src = $image.attr("src");
+  var self = this;
 
-  var pWidth = originImage.width;
-  var pHeight = originImage.height;
+  var options = {};
+
+  var defaultOptions = {
+    className: "ip-container"
+  };
+
+  options = $.extend(defaultOptions, customOptions);
+
+  // Container should be relatively positioned, class name is assigned
+  // so it can be handled with css
+  this.addClass(options.className);
+
+  var $image = this.find(">img");
+
+  //var pWidth = originImage.width;
+  //var pHeight = originImage.height;
 
   // The ratio of original image to projected image, default is one
   var widthRatio = 1;
@@ -15,22 +27,18 @@ $.fn.imageProjection = function( $image, options ) {
   var $window = $(window);
 
   // The surface where viewfinder will be attached
-  var $surface = this;
-  var surfaceOffset = this.offset();
-
-  // Making sure that viewfinder and projection positioning works
-  $surface.parent().css({
-    position: "relative"
+  var surface = new Surface({
+    "$image": $image
   });
 
   // Create the viewfinder and projection
   var viewfinder;
   var projection = new Projection({
     imageUrl: $image.data("pimg") === "" ? $image.attr("src") : $image.data("pimg"),
-    width: originImage.width,
-    height: originImage.height,
+    width: surface.width,
+    height: surface.height,
     position: {
-      left: $surface.width() + 30
+      left: surface.width + 30
     }
   });
 
@@ -38,16 +46,16 @@ $.fn.imageProjection = function( $image, options ) {
   projection.$el.on("ip.projection.imageLoaded", function() {
 
     // Recalculate the ratio
-    widthRatio = projection.image.width / originImage.width;
-    heightRatio = projection.image.height / originImage.height;
+    widthRatio = projection.image.width / surface.width;
+    heightRatio = projection.image.height / surface.height;
 
     // Initiate viewfinder
     viewfinder = new Viewfinder({
-      width: pWidth / widthRatio,
-      height: pHeight / heightRatio,
+      width: surface.width / widthRatio,
+      height: surface.height / heightRatio,
       boundaries: {
-        width: $surface.width(),
-        height: $surface.height()
+        width: surface.width,
+        height: surface.height
       }
     });
 
@@ -55,32 +63,33 @@ $.fn.imageProjection = function( $image, options ) {
 
     // Put viewfinder and projection on their respective places
     // TODO: Improve dom building
-    $surface.append(viewfinder.$el);
-    $surface.parent().append(projection.$el);
+    surface.$el.append(viewfinder.$el);
+    self.prepend(surface.$el);
+    self.append(projection.$el);
 
   });
 
 
   // Toggle the viewfinder and projection whenever the mouse cursor is inside the surface
-  this.hover(
-    function( event ){
+  surface.$el.hover(
+    function(event) {
       viewfinder.show();
       projection.show();
     },
-    function( event ){
+    function(event) {
       viewfinder.hide();
       projection.hide();
     }
   );
 
-  this.mousemove(function(event){
+  surface.$el.mousemove(function(event){
 
     // Adjust viewfinder position as we move around the surface
 
     var mousePosition = {};
 
-    mousePosition.left = Math.floor(event.clientX - surfaceOffset.left + $window.scrollLeft());
-    mousePosition.top = Math.floor(event.clientY - surfaceOffset.top + $window.scrollTop());
+    mousePosition.left = Math.floor(event.clientX - surface.getOffset().left + $window.scrollLeft());
+    mousePosition.top = Math.floor(event.clientY - surface.getOffset().top + $window.scrollTop());
 
     viewfinder.setPosition(mousePosition);
 
@@ -95,7 +104,6 @@ $.fn.imageProjection = function( $image, options ) {
     projection.setImagePosition(projectionImagePosition);
 
   });
-
 
   return this;
 

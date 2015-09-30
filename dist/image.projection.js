@@ -1,53 +1,55 @@
 (function($) {
-    $.fn.imageProjection = function($image, options) {
+    $.fn.imageProjection = function(customOptions) {
         "use strict";
-        var originImage = new Image();
-        originImage.src = $image.attr("src");
-        var projectedImage = new Image();
-        var pWidth = originImage.width;
-        var pHeight = originImage.height;
+        var self = this;
+        var options = {};
+        var defaultOptions = {
+            className: "ip-container"
+        };
+        options = $.extend(defaultOptions, customOptions);
+        this.addClass(options.className);
+        var $image = this.find(">img");
         var widthRatio = 1;
         var heightRatio = 1;
         var $window = $(window);
-        var $surface = this;
-        var surfaceOffset = this.offset();
-        $surface.parent().css({
-            position: "relative"
+        var surface = new Surface({
+            $image: $image
         });
         var viewfinder;
         var projection = new Projection({
             imageUrl: $image.data("pimg") === "" ? $image.attr("src") : $image.data("pimg"),
-            width: originImage.width,
-            height: originImage.height,
+            width: surface.width,
+            height: surface.height,
             position: {
-                left: $surface.width() + 30
+                left: surface.width + 30
             }
         });
         projection.$el.on("ip.projection.imageLoaded", function() {
-            widthRatio = projection.image.width / originImage.width;
-            heightRatio = projection.image.height / originImage.height;
+            widthRatio = projection.image.width / surface.width;
+            heightRatio = projection.image.height / surface.height;
             viewfinder = new Viewfinder({
-                width: pWidth / widthRatio,
-                height: pHeight / heightRatio,
+                width: surface.width / widthRatio,
+                height: surface.height / heightRatio,
                 boundaries: {
-                    width: $surface.width(),
-                    height: $surface.height()
+                    width: surface.width,
+                    height: surface.height
                 }
             });
-            $surface.append(viewfinder.$el);
-            $surface.parent().append(projection.$el);
+            surface.$el.append(viewfinder.$el);
+            self.prepend(surface.$el);
+            self.append(projection.$el);
         });
-        this.hover(function(event) {
+        surface.$el.hover(function(event) {
             viewfinder.show();
             projection.show();
         }, function(event) {
             viewfinder.hide();
             projection.hide();
         });
-        this.mousemove(function(event) {
+        surface.$el.mousemove(function(event) {
             var mousePosition = {};
-            mousePosition.left = Math.floor(event.clientX - surfaceOffset.left + $window.scrollLeft());
-            mousePosition.top = Math.floor(event.clientY - surfaceOffset.top + $window.scrollTop());
+            mousePosition.left = Math.floor(event.clientX - surface.getOffset().left + $window.scrollLeft());
+            mousePosition.top = Math.floor(event.clientY - surface.getOffset().top + $window.scrollTop());
             viewfinder.setPosition(mousePosition);
             var projectionImagePosition = {};
             projectionImagePosition.left = viewfinder.position.left * -1 * widthRatio;
@@ -105,6 +107,27 @@
         };
         this.destroy = function() {
             self.$el.remove();
+        };
+    };
+    var Surface = function(customOptions) {
+        "use strict";
+        var self = this;
+        var options = {};
+        var defaultOptions = {
+            className: "ip-surface"
+        };
+        options = $.extend(defaultOptions, customOptions);
+        this.image = new Image();
+        this.image.src = options.$image.attr("src");
+        this.width = this.image.width;
+        this.height = this.image.height;
+        this.$el = $("<div/>", {
+            "class": options.className,
+            width: self.width,
+            height: self.height
+        });
+        this.getOffset = function() {
+            return self.$el.offset();
         };
     };
     function Viewfinder(customOptions) {
