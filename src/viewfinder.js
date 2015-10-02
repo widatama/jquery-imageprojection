@@ -1,4 +1,4 @@
-function Viewfinder(customOptions) {
+var Viewfinder = function(customOptions) {
   "use strict";
 
   var self = this;
@@ -65,8 +65,8 @@ function Viewfinder(customOptions) {
   };
 
   this.setSize = function(size) {
-    self.$el.width(options.width);
-    self.$el.height(options.height);
+    self.$el.width(size.width);
+    self.$el.height(size.height);
   };
 
   // Show/hide viewfinder using class so it can be handled with css
