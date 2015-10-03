@@ -1,6 +1,6 @@
-$( window ).load(function(){
+$(document).ready(function(){
 
   $(".wrap").imageProjection();
-  $(".wrap").imageProjection("destroy");
+  //$(".wrap").imageProjection("destroy");
 
 });
