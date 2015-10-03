@@ -1,5 +1,9 @@
 srcFiles = [
-  "src/*.js"
+  "src/container.js",
+  "src/surface.js",
+  "src/projection.js",
+  "src/viewfinder.js",
+  "src/plugin.js"
 ];
 
 module.exports = {
