@@ -1,4 +1,10 @@
 (function($) {
+    if (typeof module != "undefined" && module.exports) {
+        var $ = require("jQuery");
+        var Surface = require("./surface");
+        var Viewfinder = require("./viewfinder");
+        var Projection = require("./projection");
+    }
     var Container = function($el, customOptions) {
         "use strict";
         var self = this;
@@ -65,8 +71,11 @@
         this.destroy = function() {
             self.projection.destroy();
             self.viewfinder.destroy();
+            self.surface.destroy();
         };
     };
+    if (typeof module != "undefined" && module.exports) module.exports = Container;
+    if (typeof module != "undefined" && module.exports) var $ = require("jQuery");
     var Surface = function(customOptions) {
         "use strict";
         var self = this;
@@ -89,9 +98,11 @@
         };
         this.destroy = function() {
             self.$el.remove();
+            self.$el = null;
         };
     };
     if (typeof module != "undefined" && module.exports) module.exports = Surface;
+    if (typeof module != "undefined" && module.exports) var $ = require("jQuery");
     var Projection = function(customOptions) {
         "use strict";
         var self = this;
@@ -99,8 +110,8 @@
         var defaultOptions = {
             className: "ip-projection",
             imageUrl: "",
-            width: 1,
-            height: 1,
+            width: 0,
+            height: 0,
             position: {
                 left: 0,
                 top: 0
@@ -110,14 +121,19 @@
         this.$el = $("<div/>", {
             "class": options.className
         });
+        this.$el.css({
+            left: options.position.left,
+            top: options.position.top
+        });
         this.image = new Image();
         this.image.src = options.imageUrl;
+        this.width = options.width;
+        this.height = options.height;
         this.image.onload = function() {
             self.$el.trigger("ip.projection.imageLoaded");
             self.$el.css({
                 "background-image": "url('" + self.image.src + "')",
-                "background-repeat": "no-repeat",
-                left: options.position.left
+                "background-repeat": "no-repeat"
             });
         };
         this.setImagePosition = function(position) {
@@ -141,8 +157,11 @@
         };
         this.destroy = function() {
             self.$el.remove();
+            self.$el = null;
         };
     };
+    if (typeof module != "undefined" && module.exports) module.exports = Projection;
+    if (typeof module != "undefined" && module.exports) var $ = require("jQuery");
     var Viewfinder = function(customOptions) {
         "use strict";
         var self = this;
@@ -192,8 +211,10 @@
         };
         this.destroy = function() {
             self.$el.remove();
+            self.$el = null;
         };
     };
+    if (typeof module != "undefined" && module.exports) module.exports = Viewfinder;
     var methods = {
         init: function(customOptions) {
             "use strict";

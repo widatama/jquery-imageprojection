@@ -7,7 +7,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask("build", ["clean:dist", "uglify"]);
+  grunt.registerTask("build", ["clean:dist", "uglify", "copy:stylesheets"]);
   grunt.registerTask("dev", ["build", "watch"]);
   grunt.registerTask("default", "build");
-}
+};

@@ -1,5 +1,5 @@
 module.exports = {
   dist: {
-    src: ["<%= buildDir %>t"]
+    src: ["<%= buildDir %>"]
   }
-}
+};

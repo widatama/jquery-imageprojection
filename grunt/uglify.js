@@ -19,7 +19,7 @@ module.exports = {
     },
 
     files: {
-      "<%= buildDir %>/image.projection.js": srcFiles
+      "<%= buildDir %>/javascripts/image.projection.js": srcFiles
     }
   },
 
@@ -30,7 +30,7 @@ module.exports = {
     },
 
     files: {
-      "<%= buildDir %>/image.projection.min.js": srcFiles
+      "<%= buildDir %>/javascripts/image.projection.min.js": srcFiles
     }
   }
-}
+};
