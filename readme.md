@@ -1,24 +1,25 @@
-As the name suggests, this plugin simulates image projection. It works by using two similar images for the original and the projected image. [See the demo](http://widatama.github.io/jquery-imageprojection)
+As the name suggests, this plugin simulates image projection. It works by using two similar images for the original and the projection. [See the demo](http://widatama.github.io/jquery-imageprojection)
 
 ![Image Projection Diagram](images/diagram.jpg "Image Projection Diagram")
 
-Whenever the surface is hovered, the viewfinder and the projected image come up. Everything covered by the viewfinder is shown on the projected image.
+Whenever the surface is hovered, the viewfinder and the projection come up. Everything covered by the viewfinder is shown as the projection.
 
 ##Sample usage
 
 ###HTML
 
-Include the scripts.
+Include the scripts and stylesheet.
 ```html
+<link rel="stylesheet" href="stylesheets/image-projection.css">
+
 <script src="javascripts/jquery.min.js"></script>
 <script src="javascripts/image.projection.js"></script>
 ```
 
-Structure the image. Here, overlay acts as the surface. The image used as original and contains the url for projection.
+Structure the container and image. The image class is important, this image will be the origin image and contains url for projection.
 ```html
 <div class="wrap">
-  <div class="overlay"></div>
-  <img src="images/sample-halved.jpg" id="sampleimg" data-pimg="images/sample.jpg" />
+  <img src="images/sample-halved.jpg" class="ip-source-image" data-pimg="images/sample.jpg" />
 </div>
 ```
 
@@ -26,7 +27,12 @@ Structure the image. Here, overlay acts as the surface. The image used as origin
 
 Initiate the projection.
 ```javascript
-$(".wrap .overlay").imageProjection($("#sampleimg"));
+$(".wrap").imageProjection();
+```
+
+Destroy the projection.
+```javascript
+$(".wrap").imageProjection("destroy");
 ```
 
 ##Development
@@ -36,12 +42,12 @@ Install dependencies
 npm install
 ```
 
-This will build the scripts from src to dist.
+This will build the scripts and copy the stylesheet to dist folder.
 ```bash
 grunt build
 ```
 
-This will build the scripts from src to dist and then turn on the watcher.
+This will do build mentioned above and then turn on the watcher.
 ```bash
 grunt dev
 ```
