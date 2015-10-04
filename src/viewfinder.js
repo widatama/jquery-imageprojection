@@ -1,3 +1,5 @@
+if (typeof module!='undefined' && module.exports) var $ = require("jQuery");
+
 var Viewfinder = function(customOptions) {
   "use strict";
 
@@ -21,8 +23,6 @@ var Viewfinder = function(customOptions) {
     class: options.className
   });
 
-  //this.$el.css(options.style);
-
   this.$el.width(options.width);
   this.$el.height(options.height);
 
@@ -37,8 +37,8 @@ var Viewfinder = function(customOptions) {
     position.top = (mousePosition.top - (self.$el.height() / 2));
 
     // Keep viewfinder from getting out of top or left boundaries
-    position.left = Math.max( position.left, 0 );
-    position.top = Math.max( position.top, 0 );
+    position.left = Math.max(position.left, 0);
+    position.top = Math.max(position.top, 0);
 
     // Keep viewfinder from getting out of bottom or right boundaries
     position.left = Math.min(
@@ -80,6 +80,9 @@ var Viewfinder = function(customOptions) {
 
   this.destroy = function() {
     self.$el.remove();
+    self.$el = null;
   };
 
-}
+};
+
+if (typeof module!='undefined' && module.exports) module.exports = Viewfinder;
