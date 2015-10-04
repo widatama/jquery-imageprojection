@@ -1,3 +1,10 @@
+if (typeof module!='undefined' && module.exports) {
+  var $ = require("jQuery");
+  var Surface = require("./surface");
+  var Viewfinder = require("./viewfinder");
+  var Projection = require("./projection");
+}
+
 var Container = function($el, customOptions) {
   "use strict";
 
@@ -110,6 +117,9 @@ var Container = function($el, customOptions) {
   this.destroy = function() {
     self.projection.destroy();
     self.viewfinder.destroy();
+    self.surface.destroy();
   };
 
 };
+
+if (typeof module!='undefined' && module.exports) module.exports = Container;
