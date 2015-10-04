@@ -1,3 +1,5 @@
+if (typeof module!='undefined' && module.exports) var $ = require("jQuery");
+
 var Surface = function(customOptions) {
   "use strict";
 
@@ -29,6 +31,9 @@ var Surface = function(customOptions) {
 
   this.destroy = function() {
     self.$el.remove();
+    self.$el = null;
   };
 
 };
+
+if (typeof module!='undefined' && module.exports) module.exports = Surface;

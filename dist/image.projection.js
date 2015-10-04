@@ -91,6 +91,7 @@
             self.$el.remove();
         };
     };
+    if (typeof module != "undefined" && module.exports) module.exports = Surface;
     var Projection = function(customOptions) {
         "use strict";
         var self = this;
