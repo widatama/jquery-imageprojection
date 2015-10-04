@@ -1,3 +1,5 @@
+if (typeof module!='undefined' && module.exports) var $ = require("jQuery");
+
 var Projection = function(customOptions) {
   "use strict";
 
@@ -8,8 +10,8 @@ var Projection = function(customOptions) {
   var defaultOptions = {
     className: "ip-projection",
     imageUrl: "",
-    width: 1,
-    height: 1,
+    width: 0,
+    height: 0,
     position: {
       left: 0,
       top: 0
@@ -22,17 +24,24 @@ var Projection = function(customOptions) {
     class: options.className
   });
 
+  this.$el.css({
+    left: options.position.left,
+    top: options.position.top
+  });
+
   this.image = new Image();
 
   this.image.src = options.imageUrl;
+
+  this.width = options.width;
+  this.height = options.height;
 
   this.image.onload = function() {
     self.$el.trigger("ip.projection.imageLoaded");
 
     self.$el.css({
       "background-image": "url('" + self.image.src + "')",
-      "background-repeat": "no-repeat",
-      left: options.position.left,
+      "background-repeat": "no-repeat"
     });
   };
 
@@ -61,6 +70,9 @@ var Projection = function(customOptions) {
 
   this.destroy = function() {
     self.$el.remove();
+    self.$el = null;
   };
 
 };
+
+if (typeof module!='undefined' && module.exports) module.exports = Projection;
