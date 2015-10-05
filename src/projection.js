@@ -37,12 +37,12 @@ var Projection = function(customOptions) {
   this.height = options.height;
 
   this.image.onload = function() {
-    self.$el.trigger("ip.projection.imageLoaded");
-
     self.$el.css({
       "background-image": "url('" + self.image.src + "')",
       "background-repeat": "no-repeat"
     });
+
+    self.$el.trigger("ip.projection.imageLoaded");
   };
 
   this.setImagePosition = function(position) {
