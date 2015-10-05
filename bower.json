@@ -1,12 +1,15 @@
 {
   "name": "jquery-imageprojection",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "homepage": "https://github.com/widatama/jquery-imageprojection",
   "authors": [
     "Danu Widatama <widatama@gmail.com>"
   ],
   "description": "Jquery plugin for simulating image projection",
-  "main": "javascripts/image.projection.js",
+  "main": [
+    "dist/javascripts/image.projection.js",
+    "dist/stylesheets/image-projection.css"
+  ],
   "moduleType": [
     "globals"
   ],
