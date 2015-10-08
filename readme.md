@@ -52,6 +52,11 @@ This will do build mentioned above and then turn on the watcher.
 grunt dev
 ```
 
+This will run the tests.
+```bash
+grunt dev
+```
+
 ##License
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
