@@ -8,13 +8,17 @@ if (typeof module!='undefined' && module.exports) {
 var Container = function($el, customOptions) {
   "use strict";
 
-  var self = this;
-
-  var options = {};
-
-  var defaultOptions = {
-    className: "ip-container"
-  };
+  var
+    self = this,
+    options = {},
+    $image = {},
+    // The ratio of original image to projected image, default is one
+    widthRatio = 1,
+    heightRatio = 1,
+    $window = $(window),
+    defaultOptions = {
+      className: "ip-container"
+    };
 
   options = $.extend(defaultOptions, customOptions);
 
@@ -24,13 +28,7 @@ var Container = function($el, customOptions) {
   // so it can be handled with css
   $el.addClass(options.className);
 
-  var $image = $el.find("img.ip-source-image");
-
-  // The ratio of original image to projected image, default is one
-  var widthRatio = 1;
-  var heightRatio = 1;
-
-  var $window = $(window);
+  $image = $el.find("img.ip-source-image");
 
   // Event handlers
   var setup = function() {

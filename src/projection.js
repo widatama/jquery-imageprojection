@@ -3,20 +3,19 @@ if (typeof module!='undefined' && module.exports) var $ = require("jQuery");
 var Projection = function(customOptions) {
   "use strict";
 
-  var self = this;
-
-  var options = {};
-
-  var defaultOptions = {
-    className: "ip-projection",
-    imageUrl: "",
-    width: 0,
-    height: 0,
-    position: {
-      left: 0,
-      top: 0
-    }
-  };
+  var
+    self = this,
+    options = {},
+    defaultOptions = {
+      className: "ip-projection",
+      imageUrl: "",
+      width: 0,
+      height: 0,
+      position: {
+        left: 0,
+        top: 0
+      }
+    };
 
   options = $.extend(defaultOptions, customOptions);
 

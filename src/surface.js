@@ -3,13 +3,12 @@ if (typeof module!='undefined' && module.exports) var $ = require("jQuery");
 var Surface = function(customOptions) {
   "use strict";
 
-  var self = this;
-
-  var options = {};
-
-  var defaultOptions = {
-    className: "ip-surface"
-  };
+  var
+    self = this,
+    options = {},
+    defaultOptions = {
+      className: "ip-surface"
+    };
 
   options = $.extend(defaultOptions, customOptions);
 

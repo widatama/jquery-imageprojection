@@ -3,19 +3,19 @@ if (typeof module!='undefined' && module.exports) var $ = require("jQuery");
 var Viewfinder = function(customOptions) {
   "use strict";
 
-  var self = this;
-
-  var options = {};
-
-  var defaultOptions = {
-    className: "ip-viewfinder",
-    width: 1,
-    height: 1,
-    boundaries: {
-      width: 100,
-      height: 100
-    }
-  };
+  var
+    self = this,
+    options = {},
+    calculatePosition = {},
+    defaultOptions = {
+      className: "ip-viewfinder",
+      width: 1,
+      height: 1,
+      boundaries: {
+        width: 100,
+        height: 100
+      }
+    };
 
   options = $.extend(defaultOptions, customOptions);
 
@@ -29,7 +29,7 @@ var Viewfinder = function(customOptions) {
   this.position = {};
 
   // Calculate viewfinder position based on mouse position
-  var calculatePosition = function(mousePosition) {
+  calculatePosition = function(mousePosition) {
     var position = {};
 
     // Calculate viewfinder position while keeping the mouse pointer at the center of viewfinder
