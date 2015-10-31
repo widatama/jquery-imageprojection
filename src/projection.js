@@ -44,33 +44,40 @@ var Projection = function(customOptions) {
     self.$el.trigger("ip.projection.imageLoaded");
   };
 
-  this.setImagePosition = function(position) {
-    self.$el.css({
-      "background-position": position.left + "px " + position.top + "px"
-    });
-  };
 
-  // Show/hide viewfinder using class so it can be handled with css
-  this.show = function() {
-    self.$el.addClass(options.className + "--shown");
-    self.$el.css({
-      width: options.width,
-      height: options.height
-    });
-  };
+  // Instance methods
 
-  this.hide = function() {
-    self.$el.removeClass(options.className + "--shown");
-    self.$el.css({
-      width: 0,
-      height: 0
-    });
-  };
+  $.extend(Projection.prototype, {
 
-  this.destroy = function() {
-    self.$el.remove();
-    self.$el = null;
-  };
+    setImagePosition: function(position) {
+      this.$el.css({
+        "background-position": position.left + "px " + position.top + "px"
+      });
+    },
+
+    // Show/hide viewfinder using class so it can be handled with css
+    show: function() {
+      this.$el.addClass(options.className + "--shown");
+      this.$el.css({
+        width: options.width,
+        height: options.height
+      });
+    },
+
+    hide: function() {
+      this.$el.removeClass(options.className + "--shown");
+      this.$el.css({
+        width: 0,
+        height: 0
+      });
+    },
+
+    destroy: function() {
+      this.$el.remove();
+      this.$el = null;
+    }
+
+  });
 
 };
 

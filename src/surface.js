@@ -24,14 +24,21 @@ var Surface = function(customOptions) {
     height: self.height
   });
 
-  this.getOffset = function() {
-    return self.$el.offset();
-  };
 
-  this.destroy = function() {
-    self.$el.remove();
-    self.$el = null;
-  };
+  // Instance methods
+
+  $.extend(Surface.prototype, {
+
+    getOffset: function() {
+      return this.$el.offset();
+    },
+
+    destroy: function() {
+      this.$el.remove();
+      this.$el = null;
+    }
+
+  });
 
 };
 

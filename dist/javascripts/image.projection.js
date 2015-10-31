@@ -7,19 +7,10 @@
     }
     var Container = function($el, customOptions) {
         "use strict";
-        var self = this;
-        var options = {};
-        var defaultOptions = {
+        var self = this, options = {}, $image = {}, widthRatio = 1, heightRatio = 1, $window = $(window), defaultOptions = {
             className: "ip-container"
         };
-        options = $.extend(defaultOptions, customOptions);
-        this.$el = $el;
-        $el.addClass(options.className);
-        var $image = $el.find("img.ip-source-image");
-        var widthRatio = 1;
-        var heightRatio = 1;
-        var $window = $(window);
-        var setup = function() {
+        function buildDOM() {
             widthRatio = self.projection.image.width / self.surface.width;
             heightRatio = self.projection.image.height / self.surface.height;
             self.viewfinder.setSize({
@@ -29,16 +20,16 @@
             self.surface.$el.append(self.viewfinder.$el);
             self.$el.prepend(self.surface.$el);
             self.$el.append(self.projection.$el);
-        };
-        var mouseIn = function() {
+        }
+        function mouseIn() {
             self.viewfinder.show();
             self.projection.show();
-        };
-        var mouseOut = function() {
+        }
+        function mouseOut() {
             self.viewfinder.hide();
             self.projection.hide();
-        };
-        var mouseMove = function(event) {
+        }
+        function mouseMove(event) {
             var mousePosition = {};
             mousePosition.left = Math.floor(event.clientX - self.surface.getOffset().left + $window.scrollLeft());
             mousePosition.top = Math.floor(event.clientY - self.surface.getOffset().top + $window.scrollTop());
@@ -47,7 +38,11 @@
             projectionImagePosition.left = self.viewfinder.position.left * -1 * widthRatio;
             projectionImagePosition.top = self.viewfinder.position.top * -1 * heightRatio;
             self.projection.setImagePosition(projectionImagePosition);
-        };
+        }
+        options = $.extend(defaultOptions, customOptions);
+        this.$el = $el;
+        $el.addClass(options.className);
+        $image = $el.find("img.ip-source-image");
         this.surface = new Surface({
             $image: $image
         });
@@ -65,22 +60,22 @@
                 left: self.surface.width + 30
             }
         });
-        this.projection.$el.on("ip.projection.imageLoaded", setup);
+        this.projection.$el.on("ip.projection.imageLoaded", buildDOM);
         this.surface.$el.hover(mouseIn, mouseOut);
         this.surface.$el.mousemove(mouseMove);
-        this.destroy = function() {
-            self.projection.destroy();
-            self.viewfinder.destroy();
-            self.surface.destroy();
-        };
+        $.extend(Container.prototype, {
+            destroy: function() {
+                this.projection.destroy();
+                this.viewfinder.destroy();
+                this.surface.destroy();
+            }
+        });
     };
     if (typeof module != "undefined" && module.exports) module.exports = Container;
     if (typeof module != "undefined" && module.exports) var $ = require("jQuery");
     var Surface = function(customOptions) {
         "use strict";
-        var self = this;
-        var options = {};
-        var defaultOptions = {
+        var self = this, options = {}, defaultOptions = {
             className: "ip-surface"
         };
         options = $.extend(defaultOptions, customOptions);
@@ -93,21 +88,21 @@
             width: self.width,
             height: self.height
         });
-        this.getOffset = function() {
-            return self.$el.offset();
-        };
-        this.destroy = function() {
-            self.$el.remove();
-            self.$el = null;
-        };
+        $.extend(Surface.prototype, {
+            getOffset: function() {
+                return this.$el.offset();
+            },
+            destroy: function() {
+                this.$el.remove();
+                this.$el = null;
+            }
+        });
     };
     if (typeof module != "undefined" && module.exports) module.exports = Surface;
     if (typeof module != "undefined" && module.exports) var $ = require("jQuery");
     var Projection = function(customOptions) {
         "use strict";
-        var self = this;
-        var options = {};
-        var defaultOptions = {
+        var self = this, options = {}, defaultOptions = {
             className: "ip-projection",
             imageUrl: "",
             width: 0,
@@ -130,43 +125,43 @@
         this.width = options.width;
         this.height = options.height;
         this.image.onload = function() {
-            self.$el.trigger("ip.projection.imageLoaded");
             self.$el.css({
                 "background-image": "url('" + self.image.src + "')",
                 "background-repeat": "no-repeat"
             });
+            self.$el.trigger("ip.projection.imageLoaded");
         };
-        this.setImagePosition = function(position) {
-            self.$el.css({
-                "background-position": position.left + "px " + position.top + "px"
-            });
-        };
-        this.show = function() {
-            self.$el.addClass(options.className + "--shown");
-            self.$el.css({
-                width: options.width,
-                height: options.height
-            });
-        };
-        this.hide = function() {
-            self.$el.removeClass(options.className + "--shown");
-            self.$el.css({
-                width: 0,
-                height: 0
-            });
-        };
-        this.destroy = function() {
-            self.$el.remove();
-            self.$el = null;
-        };
+        $.extend(Projection.prototype, {
+            setImagePosition: function(position) {
+                this.$el.css({
+                    "background-position": position.left + "px " + position.top + "px"
+                });
+            },
+            show: function() {
+                this.$el.addClass(options.className + "--shown");
+                this.$el.css({
+                    width: options.width,
+                    height: options.height
+                });
+            },
+            hide: function() {
+                this.$el.removeClass(options.className + "--shown");
+                this.$el.css({
+                    width: 0,
+                    height: 0
+                });
+            },
+            destroy: function() {
+                this.$el.remove();
+                this.$el = null;
+            }
+        });
     };
     if (typeof module != "undefined" && module.exports) module.exports = Projection;
     if (typeof module != "undefined" && module.exports) var $ = require("jQuery");
     var Viewfinder = function(customOptions) {
         "use strict";
-        var self = this;
-        var options = {};
-        var defaultOptions = {
+        var self = this, options = {}, defaultOptions = {
             className: "ip-viewfinder",
             width: 1,
             height: 1,
@@ -182,7 +177,7 @@
         this.$el.width(options.width);
         this.$el.height(options.height);
         this.position = {};
-        var calculatePosition = function(mousePosition) {
+        function calculatePosition(mousePosition) {
             var position = {};
             position.left = mousePosition.left - self.$el.width() / 2;
             position.top = mousePosition.top - self.$el.height() / 2;
@@ -191,28 +186,30 @@
             position.left = Math.min(position.left, options.boundaries.width - self.$el.outerWidth());
             position.top = Math.min(position.top, options.boundaries.height - self.$el.outerHeight());
             return position;
-        };
-        this.setPosition = function(mousePosition) {
-            self.position = calculatePosition(mousePosition);
-            self.$el.css({
-                left: self.position.left + "px",
-                top: self.position.top + "px"
-            });
-        };
-        this.setSize = function(size) {
-            self.$el.width(size.width);
-            self.$el.height(size.height);
-        };
-        this.show = function() {
-            self.$el.addClass(options.className + "--shown");
-        };
-        this.hide = function() {
-            self.$el.removeClass(options.className + "--shown");
-        };
-        this.destroy = function() {
-            self.$el.remove();
-            self.$el = null;
-        };
+        }
+        $.extend(Viewfinder.prototype, {
+            setPosition: function(mousePosition) {
+                this.position = calculatePosition(mousePosition);
+                this.$el.css({
+                    left: this.position.left + "px",
+                    top: this.position.top + "px"
+                });
+            },
+            setSize: function(size) {
+                this.$el.width(size.width);
+                this.$el.height(size.height);
+            },
+            show: function() {
+                this.$el.addClass(options.className + "--shown");
+            },
+            hide: function() {
+                this.$el.removeClass(options.className + "--shown");
+            },
+            destroy: function() {
+                this.$el.remove();
+                this.$el = null;
+            }
+        });
     };
     if (typeof module != "undefined" && module.exports) module.exports = Viewfinder;
     var methods = {

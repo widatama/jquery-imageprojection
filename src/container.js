@@ -20,18 +20,8 @@ var Container = function($el, customOptions) {
       className: "ip-container"
     };
 
-  options = $.extend(defaultOptions, customOptions);
-
-  this.$el = $el;
-
-  // Container should be relatively positioned, class name is assigned
-  // so it can be handled with css
-  $el.addClass(options.className);
-
-  $image = $el.find("img.ip-source-image");
-
   // Event handlers
-  var setup = function() {
+  function buildDOM() {
     // Recalculate the ratio
     widthRatio = self.projection.image.width / self.surface.width;
     heightRatio = self.projection.image.height / self.surface.height;
@@ -49,19 +39,19 @@ var Container = function($el, customOptions) {
     self.surface.$el.append(self.viewfinder.$el);
     self.$el.prepend(self.surface.$el);
     self.$el.append(self.projection.$el);
-  };
+  }
 
-  var mouseIn = function() {
+  function mouseIn() {
     self.viewfinder.show();
     self.projection.show();
-  };
+  }
 
-  var mouseOut = function() {
+  function mouseOut() {
     self.viewfinder.hide();
     self.projection.hide();
-  };
+  }
 
-  var mouseMove = function(event) {
+  function mouseMove(event) {
     // Adjust viewfinder position as we move around the surface
 
     var mousePosition = {};
@@ -80,14 +70,23 @@ var Container = function($el, customOptions) {
     projectionImagePosition.top = self.viewfinder.position.top * -1 * heightRatio;
 
     self.projection.setImagePosition(projectionImagePosition);
-  };
+  }
+
+  options = $.extend(defaultOptions, customOptions);
+
+  this.$el = $el;
+
+  // Container should be relatively positioned, class name is assigned so it can be handled with css
+  $el.addClass(options.className);
+
+  $image = $el.find("img.ip-source-image");
 
   // Create the surface
   this.surface = new Surface({
     "$image": $image
   });
 
-  // Create the viewfinder and projection
+  // Create the viewfinder
   this.viewfinder = new Viewfinder({
     boundaries: {
       width: self.surface.width,
@@ -95,6 +94,7 @@ var Container = function($el, customOptions) {
     }
   });
 
+  // Create the projection
   this.projection = new Projection({
     imageUrl: $image.data("pimg") === "" ? $image.attr("src") : $image.data("pimg"),
     width: self.surface.width,
@@ -104,19 +104,27 @@ var Container = function($el, customOptions) {
     }
   });
 
-  // When projected image is loaded
-  this.projection.$el.on("ip.projection.imageLoaded", setup);
+  // Build DOM when projection image is loaded
+  this.projection.$el.on("ip.projection.imageLoaded", buildDOM);
 
-  // Toggle the viewfinder and projection whenever the mouse cursor is inside the surface
+  // Show/hide the viewfinder and projection when the mouse cursor is inside/outside the surface
   this.surface.$el.hover(mouseIn, mouseOut);
 
+  // Handle viewfinder and projection display whenever the mouse cursor is moving inside the surface
   this.surface.$el.mousemove(mouseMove);
 
-  this.destroy = function() {
-    self.projection.destroy();
-    self.viewfinder.destroy();
-    self.surface.destroy();
-  };
+
+  // Instance methods
+
+  $.extend(Container.prototype, {
+
+    destroy: function() {
+      this.projection.destroy();
+      this.viewfinder.destroy();
+      this.surface.destroy();
+    }
+
+  });
 
 };
 

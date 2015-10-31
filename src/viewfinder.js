@@ -6,7 +6,6 @@ var Viewfinder = function(customOptions) {
   var
     self = this,
     options = {},
-    calculatePosition = {},
     defaultOptions = {
       className: "ip-viewfinder",
       width: 1,
@@ -29,7 +28,7 @@ var Viewfinder = function(customOptions) {
   this.position = {};
 
   // Calculate viewfinder position based on mouse position
-  calculatePosition = function(mousePosition) {
+  function calculatePosition(mousePosition) {
     var position = {};
 
     // Calculate viewfinder position while keeping the mouse pointer at the center of viewfinder
@@ -51,37 +50,42 @@ var Viewfinder = function(customOptions) {
     );
 
     return position;
-  };
+  }
 
-  // public
 
-  this.setPosition = function(mousePosition) {
-    self.position = calculatePosition(mousePosition);
+  // Instance methods
 
-    self.$el.css({
-      left: (self.position.left + "px"),
-      top: (self.position.top + "px")
-    });
-  };
+  $.extend(Viewfinder.prototype, {
 
-  this.setSize = function(size) {
-    self.$el.width(size.width);
-    self.$el.height(size.height);
-  };
+    setPosition: function(mousePosition) {
+      this.position = calculatePosition(mousePosition);
 
-  // Show/hide viewfinder using class so it can be handled with css
-  this.show = function() {
-    self.$el.addClass(options.className + "--shown");
-  };
+      this.$el.css({
+        left: (this.position.left + "px"),
+        top: (this.position.top + "px")
+      });
+    },
 
-  this.hide = function() {
-    self.$el.removeClass(options.className + "--shown");
-  };
+    setSize: function(size) {
+      this.$el.width(size.width);
+      this.$el.height(size.height);
+    },
 
-  this.destroy = function() {
-    self.$el.remove();
-    self.$el = null;
-  };
+    // Show/hide viewfinder using class so it can be handled with css
+    show: function() {
+      this.$el.addClass(options.className + "--shown");
+    },
+
+    hide: function() {
+      this.$el.removeClass(options.className + "--shown");
+    },
+
+    destroy: function() {
+      this.$el.remove();
+      this.$el = null;
+    }
+
+  });
 
 };
 
