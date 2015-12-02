@@ -1,5 +1,6 @@
+// REMOVE START //
 if (typeof module!='undefined' && module.exports) var $ = require("jQuery");
-
+// REMOVE END //
 var Projection = function(customOptions) {
   "use strict";
 
@@ -80,5 +81,6 @@ var Projection = function(customOptions) {
   });
 
 };
-
+// REMOVE START //
 if (typeof module!='undefined' && module.exports) module.exports = Projection;
+// REMOVE END //

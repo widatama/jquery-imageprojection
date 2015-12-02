@@ -1,5 +1,6 @@
+// REMOVE START //
 if (typeof module!='undefined' && module.exports) var $ = require("jQuery");
-
+// REMOVE END //
 var Viewfinder = function(customOptions) {
   "use strict";
 
@@ -88,5 +89,6 @@ var Viewfinder = function(customOptions) {
   });
 
 };
-
+// REMOVE START //
 if (typeof module!='undefined' && module.exports) module.exports = Viewfinder;
+// REMOVE END //

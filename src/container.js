@@ -1,10 +1,11 @@
+// REMOVE START //
 if (typeof module!='undefined' && module.exports) {
   var $ = require("jQuery");
   var Surface = require("./surface");
   var Viewfinder = require("./viewfinder");
   var Projection = require("./projection");
 }
-
+// REMOVE END //
 var Container = function($el, customOptions) {
   "use strict";
 
@@ -127,5 +128,6 @@ var Container = function($el, customOptions) {
   });
 
 };
-
+// REMOVE START //
 if (typeof module!='undefined' && module.exports) module.exports = Container;
+// REMOVE END //

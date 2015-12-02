@@ -1,5 +1,6 @@
+// REMOVE START //
 if (typeof module!='undefined' && module.exports) var $ = require("jQuery");
-
+// REMOVE END //
 var Surface = function(customOptions) {
   "use strict";
 
@@ -41,5 +42,6 @@ var Surface = function(customOptions) {
   });
 
 };
-
+// REMOVE START //
 if (typeof module!='undefined' && module.exports) module.exports = Surface;
+// REMOVE END //

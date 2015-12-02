@@ -1,9 +1,9 @@
 srcFiles = [
-  "src/container.js",
-  "src/surface.js",
-  "src/projection.js",
-  "src/viewfinder.js",
-  "src/plugin.js"
+  "<%= tempDir %>/container.js",
+  "<%= tempDir %>/surface.js",
+  "<%= tempDir %>/projection.js",
+  "<%= tempDir %>/viewfinder.js",
+  "<%= tempDir %>/plugin.js"
 ];
 
 module.exports = {

@@ -1,10 +1,4 @@
 (function($) {
-    if (typeof module != "undefined" && module.exports) {
-        var $ = require("jQuery");
-        var Surface = require("./surface");
-        var Viewfinder = require("./viewfinder");
-        var Projection = require("./projection");
-    }
     var Container = function($el, customOptions) {
         "use strict";
         var self = this, options = {}, $image = {}, widthRatio = 1, heightRatio = 1, $window = $(window), defaultOptions = {
@@ -71,8 +65,6 @@
             }
         });
     };
-    if (typeof module != "undefined" && module.exports) module.exports = Container;
-    if (typeof module != "undefined" && module.exports) var $ = require("jQuery");
     var Surface = function(customOptions) {
         "use strict";
         var self = this, options = {}, defaultOptions = {
@@ -98,8 +90,6 @@
             }
         });
     };
-    if (typeof module != "undefined" && module.exports) module.exports = Surface;
-    if (typeof module != "undefined" && module.exports) var $ = require("jQuery");
     var Projection = function(customOptions) {
         "use strict";
         var self = this, options = {}, defaultOptions = {
@@ -157,8 +147,6 @@
             }
         });
     };
-    if (typeof module != "undefined" && module.exports) module.exports = Projection;
-    if (typeof module != "undefined" && module.exports) var $ = require("jQuery");
     var Viewfinder = function(customOptions) {
         "use strict";
         var self = this, options = {}, defaultOptions = {
@@ -211,7 +199,6 @@
             }
         });
     };
-    if (typeof module != "undefined" && module.exports) module.exports = Viewfinder;
     var methods = {
         init: function(customOptions) {
             "use strict";
